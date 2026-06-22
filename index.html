@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgroNest — Premium Fertilisers</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.9.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f5f5f0;color:#1a1a1a}
+a{text-decoration:none;color:inherit}
+
+/* NAV */
+.nav{background:#fff;border-bottom:1px solid #e5e5e0;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:58px;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.logo{font-size:20px;font-weight:600;color:#3B6D11;display:flex;align-items:center;gap:8px}
+.nav-links{display:flex;gap:1.5rem;align-items:center}
+.nav-link{font-size:14px;color:#555;cursor:pointer;padding:4px 0;border-bottom:2px solid transparent;transition:color .15s}
+.nav-link.active,.nav-link:hover{color:#3B6D11;border-bottom-color:#3B6D11}
+.cart-btn{background:#3B6D11;color:#fff;border:none;border-radius:8px;padding:7px 16px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:inherit}
+.cart-btn:hover{background:#27500A}
+.cart-badge{background:#fff;color:#3B6D11;border-radius:50%;width:18px;height:18px;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#173404 0%,#3B6D11 60%,#639922 100%);color:#EAF3DE;padding:4rem 1.5rem 3.5rem;text-align:center}
+.hero h1{font-size:32px;font-weight:600;margin-bottom:.75rem;line-height:1.2}
+.hero p{font-size:16px;color:#C0DD97;max-width:520px;margin:0 auto 1.75rem;line-height:1.6}
+.hero-btn{background:#EAF3DE;color:#3B6D11;border:none;border-radius:8px;padding:12px 28px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s}
+.hero-btn:hover{background:#C0DD97}
+
+/* STATS */
+.stats-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:2rem 1.5rem 1rem}
+.stat-card{background:#fff;border:1px solid #e5e5e0;border-radius:12px;padding:1.25rem;text-align:center}
+.stat-num{font-size:26px;font-weight:700;color:#3B6D11}
+.stat-lbl{font-size:13px;color:#777;margin-top:4px}
+
+/* PRODUCTS */
+.section{padding:1.5rem}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+.section-title{font-size:20px;font-weight:600}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.5rem}
+.filter-btn{border:1px solid #d5d5d0;background:#fff;color:#555;border-radius:20px;padding:6px 16px;font-size:13px;cursor:pointer;font-family:inherit;transition:all .15s}
+.filter-btn.active,.filter-btn:hover{background:#3B6D11;color:#fff;border-color:#3B6D11}
+.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px}
+.product-card{background:#fff;border:1px solid #e5e5e0;border-radius:12px;overflow:hidden;cursor:default;transition:box-shadow .15s,border-color .15s}
+.product-card:hover{box-shadow:0 4px 14px rgba(0,0,0,.08);border-color:#b5b5b0}
+.product-img{height:110px;display:flex;align-items:center;justify-content:center;font-size:44px;background:#f5f5f0}
+.product-info{padding:12px 14px}
+.product-cat{font-size:11px;color:#639922;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.product-name{font-size:14px;font-weight:600;margin-bottom:4px;line-height:1.3}
+.product-desc{font-size:12px;color:#777;margin-bottom:10px;line-height:1.45}
+.product-footer{display:flex;align-items:center;justify-content:space-between}
+.product-price{font-size:16px;font-weight:700;color:#3B6D11}
+.add-btn{background:#3B6D11;color:#fff;border:none;border-radius:7px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:4px;transition:background .15s}
+.add-btn:hover{background:#27500A}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
+.badge-organic{background:#EAF3DE;color:#27500A}
+.badge-sale{background:#FAEEDA;color:#633806}
+
+/* CART */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:150}
+.overlay.open{display:block}
+.cart-panel{display:none;position:fixed;right:0;top:0;bottom:0;width:340px;background:#fff;border-left:1px solid #e5e5e0;z-index:200;flex-direction:column;padding:1.5rem;box-shadow:-4px 0 20px rgba(0,0,0,.12)}
+.cart-panel.open{display:flex}
+.cart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem}
+.cart-header span{font-size:17px;font-weight:600}
+.close-btn{background:none;border:none;cursor:pointer;font-size:22px;color:#777;display:flex;align-items:center;padding:2px}
+.close-btn:hover{color:#1a1a1a}
+.cart-items{flex:1;overflow-y:auto}
+.cart-item{display:flex;gap:10px;padding:12px 0;border-bottom:1px solid #f0f0eb;align-items:center}
+.cart-item-emoji{font-size:26px;width:42px;text-align:center}
+.cart-item-name{font-size:13px;font-weight:600;margin-bottom:2px}
+.cart-item-price{font-size:12px;color:#777}
+.qty-ctrl{display:flex;align-items:center;gap:6px;margin-left:auto;flex-shrink:0}
+.qty-btn{border:1px solid #d5d5d0;background:#fff;border-radius:5px;width:24px;height:24px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:background .1s;font-family:inherit}
+.qty-btn:hover{background:#f0f0eb}
+.cart-total{padding:1rem 0 0;border-top:1px solid #e5e5e0;margin-top:.5rem}
+.total-row{display:flex;justify-content:space-between;font-size:14px;margin-bottom:8px;color:#555}
+.total-row.bold{font-weight:600;font-size:16px;color:#1a1a1a}
+.checkout-btn{width:100%;background:#3B6D11;color:#fff;border:none;border-radius:8px;padding:12px;font-size:15px;font-weight:600;cursor:pointer;margin-top:.75rem;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .15s}
+.checkout-btn:hover{background:#27500A}
+.empty-cart{text-align:center;padding:2.5rem 1rem;color:#aaa;font-size:14px}
+.empty-cart i{font-size:40px;display:block;margin-bottom:10px;opacity:.4}
+
+/* CONTACT */
+.contact-wrap{padding:1.5rem}
+.contact-card{background:#fff;border:1px solid #e5e5e0;border-radius:14px;padding:2rem}
+.contact-card h2{font-size:20px;font-weight:600;margin-bottom:.5rem}
+.contact-card p{font-size:14px;color:#777;margin-bottom:1.5rem;line-height:1.6}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-group.full{grid-column:1/-1}
+.form-group label{font-size:13px;color:#555;font-weight:500}
+.form-group input,.form-group select,.form-group textarea{border:1px solid #d5d5d0;border-radius:8px;padding:9px 12px;font-size:14px;background:#fff;color:#1a1a1a;font-family:inherit;transition:border-color .15s}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:#3B6D11;box-shadow:0 0 0 3px rgba(59,109,17,.1)}
+.form-group textarea{resize:vertical;min-height:90px}
+.submit-btn{background:#3B6D11;color:#fff;border:none;border-radius:8px;padding:11px 26px;font-size:14px;font-weight:600;cursor:pointer;margin-top:.75rem;font-family:inherit;display:inline-flex;align-items:center;gap:7px;transition:background .15s}
+.submit-btn:hover{background:#27500A}
+.success-msg{display:none;background:#EAF3DE;color:#27500A;border-radius:8px;padding:12px 16px;font-size:14px;margin-top:1rem;display:none;align-items:center;gap:8px;font-weight:500}
+
+/* FOOTER */
+footer{background:#fff;border-top:1px solid #e5e5e0;padding:2rem 1.5rem;margin-top:2rem;text-align:center;color:#999;font-size:13px}
+footer .footer-logo{font-size:17px;font-weight:600;color:#3B6D11;margin-bottom:.5rem}
+
+/* WHATSAPP */
+.whatsapp-btn{position:fixed;bottom:24px;right:24px;background:#25D366;color:#fff;border:none;border-radius:50px;padding:12px 20px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:8px;box-shadow:0 4px 14px rgba(37,211,102,.4);z-index:90;transition:background .15s}
+.whatsapp-btn:hover{background:#1ebe57}
+
+@media(max-width:600px){
+  .form-grid{grid-template-columns:1fr}
+  .form-group.full{grid-column:1}
+  .products{grid-template-columns:repeat(2,1fr)}
+  .stats-bar{grid-template-columns:repeat(3,1fr)}
+  .cart-panel{width:100%}
+  .hero h1{font-size:24px}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="logo"><i class="ti ti-leaf"></i> AgroNest</div>
+  <div class="nav-links">
+    <span class="nav-link active" onclick="showSection('shop',this)">Shop</span>
+    <span class="nav-link" onclick="showSection('contact',this)">Contact</span>
+    <button class="cart-btn" onclick="openCart()">
+      <i class="ti ti-shopping-cart"></i> Cart
+      <span class="cart-badge" id="cart-count">0</span>
+    </button>
+  </div>
+</nav>
+
+<!-- SHOP -->
+<div id="shop-section">
+  <div class="hero">
+    <h1>Grow more, waste less</h1>
+    <p>Premium fertilisers for every crop — sourced from trusted manufacturers, delivered to your farm within 48 hours.</p>
+    <button class="hero-btn" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+      <i class="ti ti-arrow-down"></i> Shop now
+    </button>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-card"><div class="stat-num">40+</div><div class="stat-lbl">Products</div></div>
+    <div class="stat-card"><div class="stat-num">1,200+</div><div class="stat-lbl">Farmers served</div></div>
+    <div class="stat-card"><div class="stat-num">48hr</div><div class="stat-lbl">Delivery</div></div>
+  </div>
+
+  <div class="section" id="products">
+    <div class="section-header">
+      <span class="section-title">Our products</span>
+    </div>
+    <div class="filters">
+      <button class="filter-btn active" onclick="filterProducts('all',this)">All</button>
+      <button class="filter-btn" onclick="filterProducts('npk',this)">NPK</button>
+      <button class="filter-btn" onclick="filterProducts('organic',this)">Organic</button>
+      <button class="filter-btn" onclick="filterProducts('urea',this)">Urea</button>
+      <button class="filter-btn" onclick="filterProducts('micro',this)">Micronutrients</button>
+      <button class="filter-btn" onclick="filterProducts('bio',this)">Bio-fertilisers</button>
+    </div>
+    <div class="products" id="product-grid"></div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div id="contact-section" style="display:none">
+  <div class="contact-wrap">
+    <div class="contact-card">
+      <h2>Get in touch</h2>
+      <p>Have a bulk order or need advice on which fertiliser suits your crop? Fill in the form and we'll get back to you within 24 hours.</p>
+      <div class="form-grid">
+        <div class="form-group"><label>Full name *</label><input type="text" id="f-name" placeholder="e.g. Ramesh Patel"></div>
+        <div class="form-group"><label>Phone number *</label><input type="tel" id="f-phone" placeholder="+91 9876543210"></div>
+        <div class="form-group"><label>Email</label><input type="email" id="f-email" placeholder="you@example.com"></div>
+        <div class="form-group"><label>State</label>
+          <select id="f-state">
+            <option value="">Select state</option>
+            <option>Madhya Pradesh</option><option>Maharashtra</option><option>Punjab</option>
+            <option>Uttar Pradesh</option><option>Rajasthan</option><option>Gujarat</option>
+            <option>Karnataka</option><option>Andhra Pradesh</option><option>Haryana</option><option>Bihar</option><option>Other</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Product interest</label>
+          <select id="f-product">
+            <option value="">Choose product</option>
+            <option>NPK 12-32-16</option><option>NPK 20-20-20</option><option>Urea 46%</option>
+            <option>DAP</option><option>Organic compost</option><option>Vermicompost</option>
+            <option>Micronutrient mix</option><option>Bio-fertiliser</option><option>Other</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Quantity (bags)</label><input type="number" id="f-qty" placeholder="e.g. 50" min="1"></div>
+        <div class="form-group full"><label>Message</label><textarea id="f-msg" placeholder="Tell us about your crop, land size, or any questions..."></textarea></div>
+      </div>
+      <button class="submit-btn" onclick="submitForm()"><i class="ti ti-send"></i> Send enquiry</button>
+      <div class="success-msg" id="success-msg"><i class="ti ti-circle-check"></i> Thanks! We'll contact you within 24 hours.</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><i class="ti ti-leaf"></i> AgroNest</div>
+  <p>Quality fertilisers for Indian farmers · Free delivery above ₹5,000</p>
+  <p style="margin-top:8px">© 2025 AgroNest. All rights reserved.</p>
+</footer>
+
+<!-- WHATSAPP BUTTON -->
+<button class="whatsapp-btn" onclick="window.open('https://wa.me/919876543210?text=Hi%2C+I%27m+interested+in+your+fertilisers','_blank')">
+  <i class="ti ti-brand-whatsapp"></i> Order on WhatsApp
+</button>
+
+<!-- CART OVERLAY & PANEL -->
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+<div class="cart-panel" id="cart-panel">
+  <div class="cart-header">
+    <span>Your cart</span>
+    <button class="close-btn" onclick="closeCart()" aria-label="Close cart"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="cart-items" id="cart-items"><div class="empty-cart"><i class="ti ti-shopping-cart"></i>Your cart is empty</div></div>
+  <div class="cart-total" id="cart-total"></div>
+</div>
+
+<script>
+const products=[
+  {id:1,name:"NPK 12-32-16",cat:"npk",emoji:"🌾",desc:"High phosphorus blend for root development",price:1450,unit:"50kg bag",badge:""},
+  {id:2,name:"NPK 20-20-20",cat:"npk",emoji:"🌿",desc:"Balanced formula for all crops",price:1280,unit:"50kg bag",badge:""},
+  {id:3,name:"Urea 46% N",cat:"urea",emoji:"💧",desc:"High-nitrogen for vegetative growth",price:860,unit:"50kg bag",badge:""},
+  {id:4,name:"DAP 18-46-0",cat:"npk",emoji:"🫘",desc:"Di-ammonium phosphate for sowing",price:1350,unit:"50kg bag",badge:"sale"},
+  {id:5,name:"Organic compost",cat:"organic",emoji:"🍂",desc:"Rich humus compost, 100% natural",price:620,unit:"40kg bag",badge:"organic"},
+  {id:6,name:"Vermicompost",cat:"organic",emoji:"🪱",desc:"Worm castings for soil enrichment",price:780,unit:"30kg bag",badge:"organic"},
+  {id:7,name:"Micronutrient mix",cat:"micro",emoji:"⚗️",desc:"Zinc, boron, iron & manganese blend",price:490,unit:"5kg pack",badge:""},
+  {id:8,name:"Zinc sulphate",cat:"micro",emoji:"🔬",desc:"Corrects zinc deficiency in paddy & wheat",price:320,unit:"5kg pack",badge:""},
+  {id:9,name:"Rhizobium culture",cat:"bio",emoji:"🧫",desc:"Nitrogen-fixing bacteria for legumes",price:180,unit:"500g pack",badge:"organic"},
+  {id:10,name:"PSB biofertiliser",cat:"bio",emoji:"🌱",desc:"Phosphate solubilising bacteria",price:160,unit:"500g pack",badge:"organic"},
+  {id:11,name:"Calcium nitrate",cat:"micro",emoji:"🧪",desc:"Prevents blossom end rot in tomatoes",price:560,unit:"25kg bag",badge:""},
+  {id:12,name:"Potassium sulphate",cat:"npk",emoji:"🌻",desc:"Chloride-free potassium for quality crops",price:980,unit:"25kg bag",badge:"sale"},
+];
+let cart={};
+
+function renderProducts(filter){
+  const grid=document.getElementById("product-grid");
+  const list=filter==="all"?products:products.filter(p=>p.cat===filter);
+  grid.innerHTML=list.map(p=>`
+    <div class="product-card">
+      <div class="product-img">${p.emoji}</div>
+      <div class="product-info">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <span class="product-cat">${p.cat}</span>
+          ${p.badge==="organic"?'<span class="badge badge-organic">Organic</span>':p.badge==="sale"?'<span class="badge badge-sale">Sale</span>':""}
+        </div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-desc">${p.desc} · ${p.unit}</div>
+        <div class="product-footer">
+          <span class="product-price">₹${p.price.toLocaleString('en-IN')}</span>
+          <button class="add-btn" onclick="addToCart(${p.id})"><i class="ti ti-plus"></i> Add</button>
+        </div>
+      </div>
+    </div>`).join("");
+}
+
+function filterProducts(cat,btn){
+  document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  renderProducts(cat);
+}
+
+function addToCart(id){
+  cart[id]=(cart[id]||0)+1;
+  updateCartUI();
+}
+function removeFromCart(id){
+  if(cart[id]>1)cart[id]--;else delete cart[id];
+  updateCartUI();
+}
+
+function updateCartUI(){
+  const total=Object.values(cart).reduce((a,b)=>a+b,0);
+  document.getElementById("cart-count").textContent=total;
+  const itemsEl=document.getElementById("cart-items");
+  const totalEl=document.getElementById("cart-total");
+  const keys=Object.keys(cart);
+  if(!keys.length){
+    itemsEl.innerHTML='<div class="empty-cart"><i class="ti ti-shopping-cart"></i>Your cart is empty</div>';
+    totalEl.innerHTML="";return;
+  }
+  itemsEl.innerHTML=keys.map(id=>{
+    const p=products.find(x=>x.id==id);
+    return`<div class="cart-item">
+      <div class="cart-item-emoji">${p.emoji}</div>
+      <div>
+        <div class="cart-item-name">${p.name}</div>
+        <div class="cart-item-price">₹${p.price.toLocaleString('en-IN')} × ${cart[id]}</div>
+      </div>
+      <div class="qty-ctrl">
+        <button class="qty-btn" onclick="removeFromCart(${id})">−</button>
+        <span style="font-size:13px;min-width:16px;text-align:center">${cart[id]}</span>
+        <button class="qty-btn" onclick="addToCart(${id})">+</button>
+      </div>
+    </div>`;}).join("");
+  const sub=keys.reduce((s,id)=>s+products.find(x=>x.id==id).price*cart[id],0);
+  const del=sub>5000?0:150;
+  totalEl.innerHTML=`
+    <div class="total-row"><span>Subtotal</span><span>₹${sub.toLocaleString('en-IN')}</span></div>
+    <div class="total-row"><span>Delivery</span><span>${del===0?'<span style="color:#3B6D11;font-weight:600">Free</span>':'₹'+del}</span></div>
+    <div class="total-row bold"><span>Total</span><span>₹${(sub+del).toLocaleString('en-IN')}</span></div>
+    <button class="checkout-btn" onclick="alert('Connect a payment gateway like Razorpay to enable checkout!')">
+      <i class="ti ti-credit-card"></i> Proceed to checkout
+    </button>`;
+}
+
+function openCart(){document.getElementById("cart-panel").classList.add("open");document.getElementById("overlay").classList.add("open");}
+function closeCart(){document.getElementById("cart-panel").classList.remove("open");document.getElementById("overlay").classList.remove("open");}
+
+function showSection(s,el){
+  document.getElementById("shop-section").style.display=s==="shop"?"block":"none";
+  document.getElementById("contact-section").style.display=s==="contact"?"block":"none";
+  document.querySelectorAll(".nav-link").forEach(l=>l.classList.remove("active"));
+  if(el)el.classList.add("active");
+}
+
+function submitForm(){
+  const name=document.getElementById("f-name").value.trim();
+  const phone=document.getElementById("f-phone").value.trim();
+  if(!name||!phone){alert("Please enter your name and phone number.");return;}
+  const msg=document.getElementById("success-msg");
+  msg.style.display="flex";
+  ["f-name","f-phone","f-email","f-msg"].forEach(id=>document.getElementById(id).value="");
+  document.getElementById("f-state").value="";
+  document.getElementById("f-product").value="";
+  setTimeout(()=>msg.style.display="none",5000);
+}
+
+renderProducts("all");
+</script>
+</body>
+</html>
